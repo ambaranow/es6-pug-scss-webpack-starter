@@ -1,7 +1,7 @@
 {
-	"name": "app",
-	"title": "app",
-	"description": "",
+	"name": "es6-pug-scss-webpack-starter",
+	"title": "es6-pug-scss-webpack-starter",
+	"description": "A starter project to work with vanilla ES6 using Babel, Scss, Pug and Webpack",
 	"keywords": [],
 	"repository": {},
 	"author": {},
