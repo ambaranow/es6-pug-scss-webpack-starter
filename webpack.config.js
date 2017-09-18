@@ -4,7 +4,7 @@ log('blue', NODE_ENV)
 
 const config = require('./build_helpers/config')
 
-// const testServer = config.server.testServer;
+const testServer = config.server.testServer;
 const buildFolder = config.paths.dist
 
 const pkg = require('./package.json')
@@ -22,7 +22,7 @@ const LocalePlugin = require('./build_helpers/WebpackLocalePlugin')
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin')
 
 const jQuery = require('jquery/dist/jquery.min')
-// const Bootstrap = require("bootstrap/dist/js/bootstrap.min")
+const Bootstrap = require('bootstrap/dist/js/bootstrap.min')
 
 const path = require('path')
 
@@ -64,95 +64,91 @@ module.exports = {
   },
   externals: {},
   module: {
-		loaders: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: [
-					{
-						loader: 'imports-loader?define=>false'
-					},
-					{
-						loader: 'babel-loader',
-						query: {
-							presets: ['es2015', 'stage-0', 'react'],
-							plugins: ["syntax-dynamic-import"]
-						}
-					},
-					{
-						loader: 'string-replace-loader',
-						query: {
-							search: 'addVersionControlFlag',
-							replace: `${version}`,
-							flags: 'g'
-						}
-					}
-				]
-			},
-			{
-				test: /\.(pug|jade)$/,
-				// loader: ExtractTextPlugin.extract({
-					use: [
-					{
-						loader: 'pug-loader',
-						options: {
-							pretty: true
-						}
-					},
-					{
-						loader: 'string-replace-loader',
-						query: {
-							search: 'addVersionControlFlag',
-							replace: `${version}`,
-							flags: 'g'
-						}
-					},
-					// { loader: 'css-loader' }
-				]
-				// })
-			},
-			{
-				test: /\.(scss|sass)$/,
-				loader: ExtractTextPlugin.extract({
-					use: [
-						{
-							loader: 'css-loader',
-							options: {
-								sourceMap: true,
-								minimize: isProdMode,
-							}
-						},
-						{
-							loader: 'postcss-loader',
-							options: {}
-						},
-						{
-							loader: 'sass-loader',
-							// options: {
-							// 	sourceMap: true
-							// }
-						},
-					],
-				})
-			},
-			{
-				test: /\.css$/,
-				use: ExtractTextPlugin.extract({
-				  fallback: "style-loader",
-				  use: "css-loader"
-				})
-			},
-			// {
-			// 	test: /\.css$/,
-			// 	loader: 'style-loader!css-loader'
-			// },
-			{
-				test: /\.yaml/,
-				loader: extractLocale.extract({
-					use: LocalePlugin.loader()
-				})
-			}
-		]
+    loaders: [{
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [{
+            loader: 'imports-loader?define=>false'
+          },
+          {
+            loader: 'babel-loader',
+            query: {
+              presets: ['es2015', 'stage-0', 'react'],
+              plugins: ["syntax-dynamic-import"]
+            }
+          },
+          {
+            loader: 'string-replace-loader',
+            query: {
+              search: 'addVersionControlFlag',
+              replace: `${version}`,
+              flags: 'g'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(pug|jade)$/,
+        // loader: ExtractTextPlugin.extract({
+        use: [{
+            loader: 'pug-loader',
+            options: {
+              pretty: true
+            }
+          },
+          {
+            loader: 'string-replace-loader',
+            query: {
+              search: 'addVersionControlFlag',
+              replace: `${version}`,
+              flags: 'g'
+            }
+          },
+          // { loader: 'css-loader' }
+        ]
+        // })
+      },
+      {
+        test: /\.(scss|sass)$/,
+        loader: ExtractTextPlugin.extract({
+          use: [{
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                minimize: isProdMode,
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {}
+            },
+            {
+              loader: 'sass-loader',
+              // options: {
+              // 	sourceMap: true
+              // }
+            },
+          ],
+        })
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      },
+      // {
+      // 	test: /\.css$/,
+      // 	loader: 'style-loader!css-loader'
+      // },
+      {
+        test: /\.yaml/,
+        loader: extractLocale.extract({
+          use: LocalePlugin.loader()
+        })
+      }
+    ]
 
   },
   plugins: [
@@ -211,6 +207,33 @@ module.exports = {
       index: '/'
     },
     hot: true,
+    // proxy: [
+    // 	{
+    // 		path: '/api',
+    // 		target: testServer,
+    // 		secure: false,
+    // 		changeOrigin: true
+    // 	},
+    // 	{
+    // 		path: '/upload',
+    // 		target: testServer,
+    // 		secure: false,
+    // 		changeOrigin: true
+    // 	},
+    // 	{
+    // 		path: '/static',
+    // 		target: testServer,
+    // 		secure: false,
+    // 		changeOrigin: true
+    // 	},
+    // 	{
+    // 		path: '/app',
+    // 		target: `${config.server.localhost}:${config.server.port}`,
+    // 		pathRewrite: {"^/app": ""},
+    // 		secure: false,
+    // 		changeOrigin: true
+    // 	}
+    // ],
     noInfo: false,
     stats: {
       color: true
@@ -235,8 +258,8 @@ if (isProdMode) {
       },
       sourceMap: isDevMode
     })
-  );
+  )
   module.exports.plugins.push(
     new HTMLCompressionPlugin()
-  );
+  )
 }
