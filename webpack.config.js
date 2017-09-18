@@ -21,8 +21,8 @@ const WriteFileWebpackPlugin = require('write-file-webpack-plugin')
 const LocalePlugin = require('./build_helpers/WebpackLocalePlugin')
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin')
 
-const jQuery = require('jquery/dist/jquery.min')
-const Bootstrap = require('bootstrap/dist/js/bootstrap.min')
+// const jQuery = require('jquery/dist/jquery.min')
+// const Bootstrap = require('bootstrap/dist/js/bootstrap.min')
 
 const path = require('path')
 
@@ -47,7 +47,7 @@ module.exports = {
   entry: {
     app: [
       './index.pug',
-      // './vendor.js',
+    //   './vendor.js',
       './index.js',
       './styles/style.scss'
     ]

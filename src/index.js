@@ -1,4 +1,5 @@
 import './styles/style.scss'
+import './vendor.js'
 
 // gonna be removed in production
 if (__DEV__) {
