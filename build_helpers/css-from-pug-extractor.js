@@ -23,15 +23,33 @@ const walk = function (directoryName, tmplExt) {
   return pages
 }
 
-module.exports = function extractScss(pagesDir, tmplExt, stylePath) {
+const fillCssArray = function(arr, ext, compPath) {
+  let dirCont = fs.readdirSync(compPath)
+  let files = dirCont.filter(
+    function(elm) {
+      return elm.match(/.*\.(scss)/ig)
+    }
+  )
+  let i = files.length
+  while (i--) {
+    let file = path.join(compPath, files[i])
+    if (arr.indexOf(file) < 0) {
+      arr.push(file)
+    }
+  }
+  return arr
+}
+
+module.exports = function extractScss(pagesDir, tmplExt, cssExt, stylePath) {
   let componentsArr = []
-  let scssArr = []
+  let cssArr = []
   const pagesArr = walk(pagesDir, tmplExt) // root pages templates array
   let i=pagesArr.length
   while (i--) {
     let pagePath = path.dirname(pagesArr[i])
     if (componentsArr.indexOf(pagePath) < 0) {
       componentsArr.push(pagePath)
+      cssArr = fillCssArray(cssArr, cssExt, pagePath)
     }
     load.file(pagesArr[i], {
       lex: lex,
@@ -40,16 +58,19 @@ module.exports = function extractScss(pagesDir, tmplExt, stylePath) {
         // console.log('"' + filename + '" file requested from "' + source + '".')
         // console.log('......')
         // full path for components(includes)
-        let pagePath = path.dirname(path.resolve(source, filename))
-        if (componentsArr.indexOf(pagePath) < 0) {
-          componentsArr.push(pagePath)
+        let compPath = path.dirname(path.resolve(path.dirname(source), filename))
+        if (componentsArr.indexOf(compPath) < 0) {
+          componentsArr.push(compPath)
+          // console.log(':: ' + compPath)
+          cssArr = fillCssArray(cssArr, cssExt, compPath)
         }
 
         return load.resolve(filename, source, options)
       }
     })
   }
-  console.log(componentsArr)
-  console.log('============================')
-  return componentsArr
+  // console.log(componentsArr)
+  // console.log(cssArr)
+  // console.log('============================')
+  return cssArr
 }
