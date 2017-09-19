@@ -24,23 +24,32 @@ const walk = function (directoryName, tmplExt) {
 }
 
 module.exports = function extractScss(pagesDir, tmplExt, stylePath) {
+  let componentsArr = []
+  let scssArr = []
   const pagesArr = walk(pagesDir, tmplExt) // root pages templates array
   let i=pagesArr.length
   while (i--) {
-    let scssArr = []
+    let pagePath = path.dirname(pagesArr[i])
+    if (componentsArr.indexOf(pagePath) < 0) {
+      componentsArr.push(pagePath)
+    }
     load.file(pagesArr[i], {
       lex: lex,
       parse: parse,
       resolve: function (filename, source, options) {
         // console.log('"' + filename + '" file requested from "' + source + '".')
         // console.log('......')
-        scssArr.push(path.resolve(source, filename)) // full path for components(includes)
+        // full path for components(includes)
+        let pagePath = path.dirname(path.resolve(source, filename))
+        if (componentsArr.indexOf(pagePath) < 0) {
+          componentsArr.push(pagePath)
+        }
+
         return load.resolve(filename, source, options)
       }
     })
-    console.log('============================')
-    console.log(scssArr)
-    // console.log('----------------------------')
   }
-  return pagesArr
+  console.log(componentsArr)
+  console.log('============================')
+  return componentsArr
 }
