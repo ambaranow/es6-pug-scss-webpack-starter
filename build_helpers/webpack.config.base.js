@@ -6,6 +6,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../build_config')
 const cssModuleExcludes = require('../build_config/css.module.excludes')
+const scssExtractor = require('./scss-extractor')
 
 const isDevMode = NODE_ENV === 'development'
 const isProdMode = NODE_ENV === 'production'
@@ -13,6 +14,12 @@ const isProdMode = NODE_ENV === 'production'
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
+
+const pages = scssExtractor(
+  resolve('src/tmpl_pages'),
+  'pug',
+  resolve('src/tmpl_pages') + '/scss/components.scss')
+console.log(pages)
 
 module.exports = {
   entry: {
