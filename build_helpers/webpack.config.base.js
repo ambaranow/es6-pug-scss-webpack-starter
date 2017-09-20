@@ -6,7 +6,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../build_config')
 const cssModuleExcludes = require('../build_config/css.module.excludes')
-const scssExtractor = require('./css-from-pug-extractor')
+// const scssExtractor = require('./css-from-pug-extractor')
 
 const isDevMode = NODE_ENV === 'development'
 const isProdMode = NODE_ENV === 'production'
@@ -16,11 +16,11 @@ function resolve(dir) {
 }
 
 // TODO add to pug and scss files watcher
-const pages = scssExtractor(
-  resolve('src/tmpl_pages'),
-  'pug',
-  'scss',
-  resolve('src') + '/scss/components.scss')
+// const pages = scssExtractor(
+//   resolve('src/tmpl_pages'),
+//   'pug',
+//   'scss',
+//   resolve('src') + '/scss/components.scss')
 
 module.exports = {
   entry: {

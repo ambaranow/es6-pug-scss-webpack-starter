@@ -1,3 +1,4 @@
+const path = require('path')
 var utils = require('./utils')
 var webpack = require('webpack')
 var config = require('../build_config')
@@ -7,12 +8,15 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const WriteFileWebpackPlugin = require('write-file-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const PugComponentsCssExtractPlugin = require('./pug-components-css-extract-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build_helpers/dev-client'].concat(baseWebpackConfig.entry[name])
 })
-
+function resolve(dir) {
+  return path.join(__dirname, '..', dir)
+}
 module.exports = merge(baseWebpackConfig, {
   module: {
     // rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
@@ -37,5 +41,11 @@ module.exports = merge(baseWebpackConfig, {
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
     }),
+    new PugComponentsCssExtractPlugin({
+      pagesDir: resolve('src/tmpl_pages'),
+      tmplExt: 'pug',
+      cssExt: 'scss',
+      stylePath: resolve('src') + '/scss/components.scss'
+    })
   ]
 })
