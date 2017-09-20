@@ -15,15 +15,17 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
+// TODO add to pug and scss files watcher
 const pages = scssExtractor(
   resolve('src/tmpl_pages'),
   'pug',
   'scss',
-  resolve('src/tmpl_pages') + '/scss/components.scss')
+  resolve('src') + '/scss/components.scss')
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    // componentsSCSS: './src/scss/components.scss'
   },
   output: {
     path: config.build.assetsRoot,

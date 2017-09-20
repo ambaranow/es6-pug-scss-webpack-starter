@@ -23,11 +23,13 @@ const walk = function (directoryName, tmplExt) {
   return pages
 }
 
-const fillCssArray = function(arr, ext, compPath) {
+const fillCssArray = function (arr, ext, compPath) {
   let dirCont = fs.readdirSync(compPath)
+  let re = new RegExp('.*.(' + ext + ')', 'ig')
   let files = dirCont.filter(
-    function(elm) {
-      return elm.match(/.*\.(scss)/ig)
+    function (elm) {
+      // TODO filter by filename or exclude '_filename.scss' with low dash
+      return elm.match(re)
     }
   )
   let i = files.length
@@ -40,11 +42,29 @@ const fillCssArray = function(arr, ext, compPath) {
   return arr
 }
 
+const writeCssFile = function (filePath, cssArr) {
+  let fileDir = path.dirname(filePath)
+  console.log('fileDir = ' + fileDir)
+  let relPathStr = ''
+  let i = cssArr.length
+  while (i--) {
+    let relPath = path.relative(fileDir, cssArr[i])
+    relPathStr += '@import "' + relPath.replace(/\\/g, '/') + '";\n'
+  }
+  fs.writeFile(filePath, relPathStr, function (err) {
+    if (err) {
+      return console.log(err)
+    }
+    console.log('The file was saved!')
+  })
+}
+
+// TODO move arguments to the options object
 module.exports = function extractScss(pagesDir, tmplExt, cssExt, stylePath) {
   let componentsArr = []
   let cssArr = []
   const pagesArr = walk(pagesDir, tmplExt) // root pages templates array
-  let i=pagesArr.length
+  let i = pagesArr.length
   while (i--) {
     let pagePath = path.dirname(pagesArr[i])
     if (componentsArr.indexOf(pagePath) < 0) {
@@ -56,21 +76,16 @@ module.exports = function extractScss(pagesDir, tmplExt, cssExt, stylePath) {
       parse: parse,
       resolve: function (filename, source, options) {
         // console.log('"' + filename + '" file requested from "' + source + '".')
-        // console.log('......')
         // full path for components(includes)
         let compPath = path.dirname(path.resolve(path.dirname(source), filename))
         if (componentsArr.indexOf(compPath) < 0) {
           componentsArr.push(compPath)
-          // console.log(':: ' + compPath)
           cssArr = fillCssArray(cssArr, cssExt, compPath)
         }
-
         return load.resolve(filename, source, options)
       }
     })
   }
-  // console.log(componentsArr)
-  // console.log(cssArr)
-  // console.log('============================')
-  return cssArr
+  writeCssFile(stylePath, cssArr)
+  return cssArr // array of only used scss files
 }
