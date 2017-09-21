@@ -1,2 +1,2 @@
 import './scss/style.scss'
-import './scss/components.scss'
+// import './scss/components.scss'

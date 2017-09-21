@@ -38,14 +38,16 @@ module.exports = merge(baseWebpackConfig, {
       inject: true
     }),
     new FriendlyErrorsPlugin(),
-    new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css')
-    }),
-    new PugComponentsCssExtractPlugin({
-      pagesDir: resolve('src/tmpl_pages'),
-      tmplExt: 'pug',
-      cssExt: 'scss',
-      stylePath: resolve('src') + '/scss/components.scss'
-    })
+    // new ExtractTextPlugin({
+    //   allChunks: true,
+    //   ignoreOrder: true,
+    //   filename: utils.assetsPath('css/[name].[contenthash].css')
+    // // }),
+    // // new PugComponentsCssExtractPlugin({
+    // //   pagesDir: resolve('src/tmpl_pages'),
+    // //   tmplExt: 'pug',
+    // //   cssExt: 'scss',
+    // //   stylePath: resolve('src') + '/scss/components.scss'
+    // })
   ]
 })

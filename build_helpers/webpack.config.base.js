@@ -55,6 +55,13 @@ module.exports = {
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
       },
+      // {
+      //   test: /\.css$/,
+      //   use: ExtractTextPlugin.extract({
+      //     fallback: 'style-loader',
+      //     use: 'css-loader'
+      //   })
+      // },
       {
         test: /\.(pug|jade)$/,
         // loader: ExtractTextPlugin.extract({
@@ -81,13 +88,15 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
+            'extract-loader',
             {
               loader: 'css-loader',
               query: {
                 modules: true,
                 sourceMap: true,
+                importLoaders: 2,
                 // minimize: isProdMode,
-                localIdentName: '[hash:base64:5]'
+                // localIdentName: '[hash:base64:5]'
               }
             },
             {
